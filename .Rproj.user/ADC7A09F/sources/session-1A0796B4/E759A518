@@ -1,0 +1,27 @@
+{
+    "id": "E759A518",
+    "path": "~/environmental_data/docs/index.rmd",
+    "project_path": "docs/index.rmd",
+    "type": "r_markdown",
+    "hash": "109378842",
+    "contents": "",
+    "dirty": false,
+    "created": 1668964379485.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "11,41",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1668964486,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1668964486826,
+    "read_only": false,
+    "read_only_alternatives": []
+}
