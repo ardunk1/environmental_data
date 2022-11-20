@@ -1,0 +1,1 @@
+"0","curve(line_point_slope(x, x1 = 70, y1 = 25, slope = 0.3), add = TRUE, col = ""blue"")"

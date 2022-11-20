@@ -1,0 +1,82 @@
+---  
+title: "Exercise # ADD THE NUMBER HERE"
+author: "Adrienne Dunk"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---  
+
+<!-- These are global options  
+       set root directory here 
+       NOTE mine is active; yours is commented out
+       change the path to reflect your PC,
+       then comment out or delete mine 
+--> 
+
+---
+
+## Select An Appropriate Path for Your PC
+
+Several examples are shown below
+
+```{r global_options, include=T}
+# recommended baseR directory location for you
+  knitr::opts_knit$set(root.dir = "~/baseR-V2022.2") 
+
+# turn off annoying messages with this option
+  knitr::opts_chunk$set(warning = T, error = T, message = F)
+```
+
+---
+
+## Where to Submit Your Homework
+
+Submit the completed exercise to:
+
+* t.edwards@usu.edu 
+
+---
+
+## Please Indicate How Many Hours You Worked on the Exercise
+
+Indicate hours as HH.QuarterHH, eg.:
+
+* 0.5 hr = ~0 hr 30 min
+* 1 hr = ~1hr 0 min  
+
+---
+
+## Add an Exercise Element Here
+
+Add some text to explain what you did for this objective
+
+Next, embed the code you use inside a **`chunk`**, as below
+
+```{r}
+# some simple code
+  x <- 1 # object x; x is assigned value of 1
+  x # examine object
+  y <- 2 # object y; y is assigned value of 2
+  z <- 3 # object z; z is assigned value of 3
+  ls() # what is in my workspace ?
+```
+
+---
+
+## Add the Next Exercise Element Here
+
+Add some text to explain what you did for this objective
+
+```{r}
+# This is a code chunk
+#   Add your code here
+```
+
+---
+
+## Add As Many Additional Eements as Required for the Exercise ...
+
+---
+
+## das Ende
+
+---

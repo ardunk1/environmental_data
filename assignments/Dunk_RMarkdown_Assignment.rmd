@@ -1,0 +1,78 @@
+---
+title: "RMarkdown Documents - Part 1"
+author: "Adrienne Dunk"
+subtitle: Analysis of Environmental Data
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# Introduction
+My name is **Adrienne Dunk** and I am in my second year of the *Environmental Conservation - Watershed and Wetlands Management* Professional Master's degree program. I am currently a Project Manager and Wetland Scientist for a local Environmental Consulting firm. I hope to gain additional scientific insight into current research and the science of watersheds, stream ecology, and restoration science while obtaining this degree. Upon completing the degree, I intend to continue working as a consultant.
+
+---
+
+
+# Concepts List
+
+1.    Basic R
+2.    How to select the right statistical test for your inquiry
+3.    Hypothesis Testing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+# Course List
+
+*   Research Concepts
+*   Dam Removal Practicum
+*   Streamflow Ecology Seminar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

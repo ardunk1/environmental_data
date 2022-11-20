@@ -1,0 +1,161 @@
+---
+title: "Data Camp Assignment"
+author: "Adrienne Dunk"
+subtitle: Analysis of Environmental Data
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# Variables: Q1 - Q6
+
+### Enter data as directed in assignment
+```{r}
+# Create the following variables as directed
+a <- "Adrienne"
+b1 <- 45.6
+b2 <- "45.6"
+c1 <- c(0:3)
+
+# Confirm outputs are as expected
+a
+b1
+b2
+c1
+```
+### Q1 - What type of data is contained in the variable "a"?
+```{r}
+class(a)
+```
+Answer: character data
+
+### Q2 - What type of data is contained in the variable "b1"?
+```{r}
+class(b1)
+```
+Answer: numeric data
+
+### Q3 - What type of data is contained in the variable "b2"?
+```{r}
+class(b2)
+```
+Answer: character data
+
+### Q4 - Explain what happens when you try to add "b1" and "b2" and why.
+```{r}
+# b1+b2 # cannot run this entry within RMarkdown as it return an error
+```
+Answer: An error occurs because the variables are of different classes and you can't do arithmetic mixing character and numeric data.
+
+### Q5 - Are the variables "b1" and "c1" the same type? Why or why not?
+```{r}
+class(c1)
+```
+Answer: "b1" and "c" are not the same type of data. "b1" is a numeric entry (real number or double) while "c1" is an integer data type and cannot take on decimal values.
+
+### Q6 - Explain what happens when you add "b1" and "c1". consider both the number of elements in each variable and the data types.
+```{r}
+c2 <- b1+c1
+c2 #view new values
+class(c2) #query the data class
+```
+Answer: When "b1" is added to "c1", it adds the "b1" value discretely to each entry in the "c1" vector. The "c1" vector remains unchanged, but the resulting "c2" vector is numeric instead of integer.
+
+---
+
+
+# Vectors: Q7 - Q9
+
+### Q7: Show the R code you used to create "v1"
+```{r}
+v1 <- c(-2:2)
+v1
+```
+
+### Q8: Show the R code you used to create "v2"
+
+```{r}
+v2 <- c(v1*3)
+v2
+```
+
+### Q9: Show the R code you used to calculate the sum of elements in "v2"
+
+```{r}
+sum(v2)
+```
+
+---
+
+# Matrices: Q10 - Q11
+
+### Q10: Show the code you used to create "mat_1"
+
+```{r}
+vec_4 <- c(1:12) #create "vec4" including integers 1-12 
+vec_4 #check output
+
+mat1 <- matrix(vec_4, nrow = 3, ncol = 4, byrow=TRUE) #build matrix
+mat1 #check output
+```
+### Q11: Show the code you used to create "mat_2"
+
+```{r}
+mat2 <- matrix(vec_4, nrow = 3, ncol = 4, byrow = FALSE) #build matrix
+mat2 #check output
+```
+
+---
+
+# Lists: Q12 - Q14
+
+### Q12: Show the R code you used to create "my_list_1"
+
+```{r}
+my_list_1 <- list(two = 5.2, one = "five point two", three = c(0:5)) #create & name variable
+my_list_1 #check output
+
+```
+### Q13: Show valid R code that selects the third element of the list
+
+```{r}
+my_list_1[[3]] #select and show third element
+
+```
+### Q14: Show the R code that selects teh list element with the name "one".
+
+```{r}
+my_list_1$one #select list element named "one"
+
+```
+
+---
+
+# Logical Tests and Subsetting: Q15 - Q16
+
+### Q15: Show the R code that you used to create "my_bool_vec"
+
+```{r}
+my_vec = rep(1:3, 5) #create vector w 15 values
+my_vec #check output
+
+my_bool_vec <- my_vec == 3 #query values from my_vec that are exactly 3 (true) all else false.
+my_bool_vec #check output
+
+
+data.frame(my_vec, my_bool_vec) #check that 3=true and all else = false
+```
+
+### Q16: Show the R code that you used to subset "my_vec" using the "my_bool_vec"
+```{r}
+my_vec[my_bool_vec == TRUE] #select values from my_vec that correspond to values in my_bool_vec that are "TRUE"
+
+
+```
+

@@ -1,0 +1,7 @@
+"0",""
+"0","plot("
+"0","  x = dat_habitat$slope, "
+"0","  y = dat_habitat$ba.tot, "
+"0","  ylab = NULL, "
+"0","  xlab = ""Slope (%)"", pch = 20, cex = .2"
+"0","  )"

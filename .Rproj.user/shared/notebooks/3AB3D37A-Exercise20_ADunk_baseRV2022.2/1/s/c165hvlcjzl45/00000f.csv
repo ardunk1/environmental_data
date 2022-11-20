@@ -1,0 +1,9 @@
+"0","#create graphs"
+"0",""
+"0","par(mfrow = c(2,1), mar = c(1.1, 4.1, 1.1, 1.1), oma = c(0, 2, 0, 0))"
+"0","z2 %>% dplyr::filter(SEX == ""M"") %$%"
+"0","  hist(IFWID, xlim = xlim_rang, ylim = ylim_rang, "
+"0","       breaks = 9, xlab = NULL, ylab = NULL, main = NULL, xaxt = ""n"", col = ""orange"")"
+"2","Error in z2 %>% dplyr::filter(SEX == ""M"") %$% hist(IFWID, xlim = xlim_rang,  : 
+  could not find function ""%$%""
+"

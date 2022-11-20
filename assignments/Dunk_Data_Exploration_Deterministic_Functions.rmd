@@ -1,0 +1,153 @@
+---
+title: "Data Exploration and Deterministic Functions"
+author: "Adrienne Dunk"
+subtitle: Analysis of Environmental Data
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# Q1: Terrain Histograms
+### Create histograms for the three terrain variables: Elevation, Slope, and Aspect and plot them in a single figure.
+
+```{r Import Data}
+getwd() #check working directory
+require(here) #load here into session
+here() #check directory
+
+dat_habitat <- read.csv(here("data", "hab.sta.csv"))
+class(dat_habitat) #check class
+
+```
+
+```{r Create histograms}
+
+elev_xrange <- c(0, max(dat_habitat$elev)+100)
+slope_xrange <- c(0, max(dat_habitat$slope)+10)
+aspect_xrange <- c(min(dat_habitat$aspect), max(dat_habitat$aspect)+40)
+
+
+par(mfrow = c(1,3), mar = c(4.1, 4.1, 1.1, 1.1))
+hist(dat_habitat$elev, main = "Elevation Histogram", xlab = "Elevation (m)", xlim = elev_xrange)
+
+par(mar = c(4.1, 1.1, 1.1, 1.1))
+hist(dat_habitat$slope, main = "Slope Histogram", xlab = "Slope (%)", xlim = slope_xrange, ylab = NULL)
+hist(dat_habitat$aspect, main = "Aspect Histogram", xlab = "Aspect (degrees)", xlim = aspect_xrange, ylab = NULL, breaks = 9)
+
+```
+
+---
+
+
+# Q2: Elevation Histogram Interpretation
+### Interpret the shape of the elevation histogram in non-technical language. Disucss the distribution of the sampling site elevations.
+
+The elevation histogram appears approximately normal meaning that it is roughly symmetrical across elevations. It appears that there may be more low-elevation observations than high-elevation observations. The site elevation sampling distribution is not even because there are many more observations from the middle of the range (200-600 meter) than from either extreme (0-200 meters or 600-900 meters).
+
+---
+
+# Q3: Slope Units
+### What are the units of slope in this data set (Hint: Check the metadata)
+
+Slope is measured in percent slope (%) meausred as a number between 0 and 110%.
+
+---
+
+# Q4: Slope Histogram Interpretation
+
+### Consider the distribution of slopes at the bird census sample sites. Interpret the shape of the slope histogram in non-technical lanauge. Discuss the distribution of the slopes.
+
+The slope data indicates that the slopes measured are not normally distibuted, meaning that they are not symmetrical around the mean. The data show that more sites 40-80% slope range were measured than in either the shallower or steeper ranges. There is a mixture of shallow and steep slopes, but there are far fewer steep slope sites than mid- or low-slope.
+
+---
+
+# Q5: Aspect
+### Define aspect, using the units from this dataset.
+
+Aspect was measured in this dataset as degrees measured in numbers ranging from 0 to 360. Likely, 0 and 360 degrees are both north, with 90 representing east, 180 representing west, and 270 representing west.
+
+---
+
+# Q6: Aspect Histogram Interpretation
+### Consider the distribution of the aspect histogram at bird census sample sites. Interpret the shape of the aspect data in non-technical language. Discuss the distribution of the aspects.
+
+The aspect histogram indicates that the sample aspects are relatively evenly represented with the exception of 360 degrees, though this may be misleading as 0 and 360 degrees are the same, the distribution may be skewed by a preference for representing north as 0 instead of 360.There appear to be the most west facing sites, with the fewest south facing sites.
+
+---
+
+# Q7: Terrain/Basal Area Linear Models
+### Create scatterplots of total basal area and each terrain variable. Fit a linear function to each terrain variable.
+
+```{r}
+
+line_point_slope = function(x, x1, y1, slope){
+  get_y_intercept = function(x1, y1, slope)
+    return(-(x1 * slope)+y1)
+  
+  linear = 
+    function(x, yint, slope)
+      return(yint + x* slope)
+  
+  return(linear(x, get_y_intercept(x1,y1,slope), slope))
+}
+
+par(mfrow = c(1,3), mar = c(4.1, 4.1, 1.1, 1.1), oma = c(0, 3, 5, 0))
+plot( 
+  x = dat_habitat$elev, 
+  y = dat_habitat$ba.tot, 
+  ylab = "Basal Area, live and dead, (m2/ha)", 
+  xlab = "Elevation (m)", pch = 20, cex = .2
+  )
+curve(line_point_slope(x, x1 = 200, y1 = 50, slope = .4), add = TRUE, col = "red")
+
+par(mar = c(4.1, 1.1, 1.1, 1.1))
+
+plot(
+  x = dat_habitat$slope, 
+  y = dat_habitat$ba.tot, 
+  ylab = NULL, 
+  xlab = "Slope (%)", pch = 20, cex = .2
+  )
+curve(line_point_slope(x, x1 = 70, y1 = 25, slope = 0.3), add = TRUE, col = "blue")
+
+plot(
+  x = dat_habitat$aspect, 
+  y = dat_habitat$ba.tot, 
+  ylab = NULL, 
+  xlab = "Aspect (degree)", pch = 20, cex = .2
+  )
+curve(line_point_slope(x, x1 = 0, y1 = 20, slope = 0), add = TRUE, col = "orange")
+
+mtext("Total Basal Area by Terrain Variable", outer = T, side = 3)
+
+
+
+```
+
+---
+
+# Q8: Terrain/Basal Model Interpretation
+### For each terrain variable, describe the relationship and model fit observed.
+
+*Elevation:* The highest rates of basal area cover appear to correspond to the mid-range of the elevation. The total basal cover decreases in both the low- and high-elevation ranges. This relationship isn't linear, so the linear model that I fit does a poor job describing how the basal area decreases as elevation increases above approximately 375 meters.
+
+*Slope:* The basal area appears to increase linearly with slope, though the data spread also increases with slope creating a lot of noise. The fit model does an adequate job describing the relationship.
+
+*Aspect:* The basal area does not appear to have a relationship with aspect. As such, the linear model has a zero-slope. The linear model provides an adquate description of the data but does not provide insight.
+
+
+
+
+
+
+
+
+
+
+
