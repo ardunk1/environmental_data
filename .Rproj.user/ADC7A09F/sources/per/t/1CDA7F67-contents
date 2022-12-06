@@ -1,0 +1,180 @@
+---  
+title: "Exercise #16"
+author: "Adrienne Dunk"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---  
+
+<!-- These are global options  
+       set root directory here 
+       NOTE mine is active; yours is commented out
+       change the path to reflect your PC,
+       then comment out or delete mine 
+--> 
+
+---
+
+## Select An Appropriate Path for Your PC
+
+Several examples are shown below
+
+```{r global_options, include=T}
+# recommended baseR directory location for you
+  knitr::opts_knit$set(root.dir = "~/baseR-V2022.2") 
+
+# turn off annoying messages with this option
+  knitr::opts_chunk$set(warning = T, error = T, message = F)
+```
+
+---
+
+## Where to Submit Your Homework
+
+Submit the completed exercise to:
+
+* t.edwards@usu.edu 
+
+---
+
+## Please Indicate How Many Hours You Worked on the Exercise
+
+Indicate hours as HH.QuarterHH, eg.:
+
+10 hr 0 min
+
+---
+
+## Objectives
+
+Build and use R functions to process and append data from a secondary source to an existing data object.
+
+
+### Element 16.1
+Write a function "AnnualLekUpdate" that imports the previous and new years lek data, checks the variable classes match, appends the new data to the preivous data, and writes the updated data out to a .csv or .RData file
+
+```{r}
+setwd("C:/Users/adrienne.dunk/Documents/baseR-V2022.2/data/exercise_dat/")
+source("AnnualLekUpdate.R")
+AnnualLekUpdate()
+
+```
+Here is the AnnualLekUpdate function code: 
+```{r}
+## FNX Name: AnnualLekUpdate
+##FNX Purpose: import 2 data sets, confirm data types are accurate & append the new data to the larger dataset
+## Imports: grouse_allyrs = Larger, multi-year data set (.RData)
+## Imports: x2 = current year's data set (.csv)
+
+
+AnnualLekUpdate <- function(grouse_allyrs, x2){ #function name
+  library(magrittr)
+   #Import two data sets
+  setwd("C:/Users/adrienne.dunk/Documents/baseR-V2022.2/data/exercise_dat/")
+  load("grouse_allyrs.RData")
+  x2 <- read.csv("grouse_newyr.csv")
+  
+  #check each variable class to make sure that x2 class matches the grouse_allyrs data. 
+  #If variable class does not match, update prior to appending data.
+  
+  if(class(grouse_allyrs$year) != class(x2$year)){ #if the classes differ
+    x2$year <- as.integer(x2$year)} #assign the type to match grouse_allyrs
+  
+  if (class(grouse_allyrs$disturbance) != class(x2$disturbance)){
+    x2$disturbance <- as.character(x2$disturbance)}
+  
+  if (class(grouse_allyrs$lek_id) != class(x2$lek_id)){
+    x2$lek_id <- as.character(x2$lek_id)}
+  
+  if (class(grouse_allyrs$complex) != class(x2$complex)){
+    x2$complex <- as.character(x2$complex)}
+  
+  if (class(grouse_allyrs$tot_male) != class(x2$tot_male)){
+    x2$tot_male <- as.integer(x2$tot_male)}
+  
+  NEW_Grouse_allyrs <- grouse_allyrs %>%
+    dplyr::bind_rows(x2)
+  
+  save(NEW_Grouse_allyrs, file = "NEW_Grouse_allyrs.RData")
+  write.csv(NEW_Grouse_allyrs, "NEW_Grouse_allyrs.csv", row.names = F)
+  
+} #end FXN
+
+
+```
+
+
+---
+
+### Element 16.2
+Write a function AnnualLekSummary that imports data from 16.1, selects the data for a specific year, and produces standard statistics
+
+```{r}
+setwd("C:/Users/adrienne.dunk/Documents/baseR-V2022.2/data/exercise_dat/")
+source("AnnualLekSummary.R")
+AnnualLekSummary(2018)
+ 
+```
+
+Here is the AnnualLekSummary:
+```{r}
+AnnualLekSummary <- function(yr){
+setwd("C:/Users/adrienne.dunk/Documents/baseR-V2022.2/data/exercise_dat/")
+var1 <- read.csv("NEW_Grouse_allyrs.csv")
+library(magrittr)
+library(dplyr)
+
+#select a specific year from the imported dataset that you want to 
+#run statistics on
+
+sel_year <- yr # Change value assigned to sel_year as needed
+
+#assign rows of data from selected year to a working datafram
+w_data <- var1 %>% dplyr::filter(year == sel_year)
+
+#calculate min, max, mean and 1 SD by within lek complex for sel_year
+
+stats <- w_data %>% dplyr::group_by(complex) %>%
+        dplyr::summarise(Min = min(tot_male, na.rm = T),
+                   Max = max(tot_male, na.rm = T),
+                   xbar = mean(tot_male, na.rm = T),
+                   SD = sd(tot_male, na.rm = T))
+
+#calculate n (# of observations) with each lek complex associated with sel_year
+
+complex <- unique(w_data$complex) #create vector of complex names
+#calculate the number of observations within each complex
+a <- length(which(w_data$complex == "Diamond"))
+b <- length(which(w_data$complex == "3corners"))
+c <- length(which(w_data$complex == "Blue"))
+d <- length(which(w_data$complex == "book_cliffs"))
+
+
+n <- as.numeric(c(a, b, c, d)) #assign 4 nobs to a single vector
+temp_df <- data.frame(complex, n) # create a df with the nobs vector and the complex names
+
+stats <- stats %>% dplyr::inner_join(temp_df, by = "complex") #append nobs to the larger stats df
+
+#calculate 90% Confidence interval from sel_year within lek complex
+
+# formula for CI = mean +/- margin of error
+# margin of error = population standard deviation / sqrt(n)
+
+LoCI90 <- stats %>% dplyr::group_by(complex) %>% dplyr::summarise(lo90CI = xbar - 1.645*(SD/sqrt(n)))
+
+HiCI90 <- stats %>% dplyr::group_by(complex) %>% dplyr::summarise(Hi90CI = xbar + 1.645*(SD/sqrt(n)))
+
+stats <- stats %>% dplyr::inner_join(LoCI90, by = "complex")
+stats <- stats %>% dplyr::inner_join(HiCI90, by = "complex")
+
+#save that vector out to a .csv file
+
+write.csv(stats, "stats.csv", row.names = F)
+
+}
+```
+
+---
+
+## das Ende
+
+---

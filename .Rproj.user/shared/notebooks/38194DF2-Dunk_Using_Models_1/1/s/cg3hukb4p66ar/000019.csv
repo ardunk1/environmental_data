@@ -1,0 +1,7 @@
+"0",""
+"0","plot("
+"0","  x = dat_habitat$aspect, "
+"0","  y = dat_habitat$ba.tot, "
+"0","  ylab = NULL, "
+"0","  xlab = ""Aspect (degree)"", pch = 20, cex = .2"
+"0","  )"

@@ -1,0 +1,78 @@
+---
+title: "Using Models 2"
+author: "Adrienne Dunk"
+subtitle: Analysis of Environmental Data
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# load data
+
+```{r Import Data}
+
+require(palmerpenguins)
+
+```
+
+
+# Q1-3 Interpreting Boxplots
+
+### Q1: Recreate conditional boxplot of penguin body mass conditioned on spex and species
+Create a histogram of salamander reproduction catastrophic rates. 
+```{r}
+boxplot(body_mass_g ~ sex * species, data = penguins, ylab = "Body Mass (g)", xlab = NULL, las = 2, names=c("female \nAdelie", "male\nAdelie", "female\nChinstrap", "male\nChinstrap", "female\nGentoo", "male\nGentoo"))
+
+```
+
+### Q2: Do you think male penguins are significantly heaver than female penguins of the same species
+
+I think that the male penguins are significantly heavier than the female penguins of the same species because the interquartile range (IQR) of the mean of each sex do not overlap for Adelie and Gentoo penguins. There is a little overlap of the IQR for chinstrap penguins, but the overlap does not include the mean.
+
+### Q3: Do you think adding sex to a model that already includes species will improve the model fit?
+Yes, adding sex to this model that already includes species will improve the model fit because if you compare the IQR of the boxplot conditioned on species only, it is a much larger range than when it is conditioned on both sex and species. For example, when the penguins are only conditioned on sex, the Gentoo IQR is approximately 4700-5500 (a range of ~800 mm), but when Gentoo is also conditioned on sex, the ranges are much smaller at 4500-4800 (~300 mm), and 5400-5700 (~300 mm) which indicates that the large range observed without sex can be further explained by adding sex to the model.
+
+
+---
+
+# Q4-5: Model Fit 1
+
+### Q4: Build fit_both
+```{r}
+fit_both <- lm(body_mass_g ~ sex*species, data = penguins)
+summary(fit_both)
+
+
+```
+### Q5: What is the base case for the two-way model?
+The base case for fit_both is female Adelie penguins.
+
+---
+
+# Q6-8: Model Coefficients
+### Q6: Which two coefficients do you need to calcuate the average mass of female Chinstrap penguins?
+
+To calculate the average mass of female Chinstrap penguins, you need the base case and the speciesChinstrap coefficient.
+
+### Q7: What is the predicted average mass of female Chinstrap penguins in the interactive model?
+The predicted average mass of female Chinstrap penguins in the interactive model is the base case (3368.84) + speciesChinstrap (158.37). The average mass is 3525.21 g.
+
+
+### Q8: What is the observed average mass of female Chinstrap penguins, calculated from the penguins data?
+```{r}
+aggregate(body_mass_g ~ sex*species, data = penguins, FUN = mean)
+#The observed average mass of female Chinstrap penguins is 3527.206 g.
+
+```
+
+
+---
+
+
+

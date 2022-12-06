@@ -7,7 +7,14 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
+
+
 
 Welcome to Adrienne's ECO 602 class page.
 
+
+[Final Project: R Reference Guide](Final_R_reference.html)
+
+[Final Project: Data Analysis](Dunk_Data_Analysis_Final.html)

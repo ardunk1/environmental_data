@@ -1,0 +1,6 @@
+"0","fit1 <- lm(body_length ~ body_mass, data = del) #simple linear regression"
+"0","fit2 <- lm(body_mass ~ sex, data = del) #1-way ANOVA"
+"0","fit3 <- lm(body_mass ~ binomial, data = del) #1-way ANOVA"
+"0","fit4 <- lm(body_mass ~ sex + binomial, data = del) #2-way additive ANOVA"
+"0","fit5 <- lm(body_mass ~ sex*binomial, data = del) #2-say factorial ANOVA"
+"0",""

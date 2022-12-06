@@ -1,0 +1,161 @@
+---
+title: "Using Models 1"
+author: "Adrienne Dunk"
+subtitle: Analysis of Environmental Data
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# load data
+
+```{r Import Data}
+require(here) #load here into session
+here() #check directory
+
+catrate <- read.csv(here("data", "catrate.csv"))
+head(catrate)
+summary(catrate)
+
+```
+
+# Q1 Catastrophic Rate Histogram
+Create a histogram of salamander reproduction catastrophic rates. 
+```{r}
+hist(catrate$cat.rate, main = "Reproduction Catastrophic Rates", xlab = "Catastrophic Rate")
+
+```
+
+---
+
+
+# Q2-4: Normality Test
+
+### Q2: Conduct a Shapiro-Wilk test for the salamander catastrophic rates.
+```{r}
+shapiro.test(catrate$cat.rate)
+#p-value of 0.04
+
+```
+### Q3: What is the null for the Shapiro Test
+The null value for the Shapiro Test is that the population is normally distributed.
+
+### Q4: Are the catastrophic rates normally-distributed?
+No, the low p-value indicates that we should reject the null. These rates are not sampled from a normally distributed population.
+
+---
+
+# Q5-7: T-Test 1
+### Q5: Run the t-test that the catastrphic rate is different from the pond late-refilling rate.
+```{r}
+t.test(catrate$cat.rate, mu = 2/7)
+
+```
+
+### Q6: State the null in plain English
+The null hypothesis is that the average of the catastrophe rate and the average of late-refilling ponds are statistically the same.
+
+### Q7: Is this a one- or two-tailed test
+This is a two-tailed test because we only asked if they were the same or different and we did not specify a direction (greater/less than).
+
+---
+
+# Q8-10: T-Test 2
+
+### Q8: What is the p-value from the Q5 t-test?
+The p-value is 0.01 which means that the catastrophe rate average and the pond late-refilling rates are not the same. With a p-value of 0.01, we have 1% chance of saying that they are different when they are actually the same.
+
+### Q9: What are the confidence intervals from the Q5 t-test?
+The 95% confidence intervals were 0.353 to 0.726. The interval does not include 0.
+
+### Q10: Did you reject the null? If so, why?
+Yes, I reject the null that the mean of the catastrophe rates are equal to the rates of the late-refilling rates. I reject it because the null is less than the pre-determined rejection rate of 0.05. Also the confidence interval does not contain 0 indicating that there is sa true difference.
+
+---
+
+# Q11-13 Wilcoxon Test 1
+
+### Q11: Conduct a one-sample Wilcoxon rank sum test that the catastrphic rate is different than the pond late-refilling rate.
+
+```{r}
+wilcox.test(catrate$cat.rate, mu = 2/7)
+```
+### Q12: Compare the Wilcox and t-test p-values
+The Wilcox p-value is 0.006 while the t-test p-value was 0.019. In both cases, we would reject the null that these two rates are the same; however, the Wilcox test provides a lower chance of having a false-positive as the p-value is an order of magnitude smaller.
+
+### Q13: Did you reject the null, if so, why?
+I rejected the null because the p-value of the Wilcox test was below my rejection rate of 0.05.
+
+---
+
+# Q14-15: Test Comparison
+
+### Q14: Compare the conclusions you could draw from the t-test and Wilcox test.
+Both tests allow you to draw the same conclusion that the pond late-refilling rate is different than the catastrphic rate. 
+
+### Q15: Which test was more appropriate for these data?
+The Wilcox test was more appropriate for these data because the catastrophic rates were not normally distributed.
+
+---
+
+# Q16-17: Flippers - Normality Tests
+
+### Q16: conduct tests of normality for the flipper lengths of Chinstrap and Adelie penguins.
+```{r}
+require(palmerpenguins)
+
+penguin_dat <- droplevels(subset(penguins, species != "Gentoo"))
+summary(penguin_dat)
+dat_adelie <- subset(penguin_dat, species == "Adelie")
+dat_chinstrap <- subset(penguin_dat, species == "Chinstrap")
+shapiro.test(dat_adelie$flipper_length_mm) #is normal
+shapiro.test(dat_chinstrap$flipper_length_mm) #is normal
+
+```
+### Q17: Interpret the test results.
+The Shapiro-Wilk test indicates that the Adelie and Chinstrap flipper lengths are each normally distributed. The p-values are 0.72 and 0.81 respectively. Given this, we cannot reject the null hypthesis that the sample populations are normally distributed.
+
+---
+
+# Q18: Flippers - Histograms
+Create a single figure of two side-by-side histograms of the flipper lengths of the penguin species.
+
+```{r}
+require(here)
+png(filename = here("Penguin_Flippers.png"), width = 800, height = 600)
+
+par(mfrow = c(1,2))
+hist(dat_adelie$flipper_length_mm,
+     main = "Adelie",
+     xlab = "Flipper Length (mm)")
+hist(dat_chinstrap$flipper_length_mm,
+     main = "Chinstrap", 
+     xlab = "Flipper Length (mm)")
+
+dev.off
+
+
+```
+---
+
+# Q19-20: Flippers T-test
+
+Conduct a two-sample t-test of the alternative hypothesis that the Adelie have different flipper lengths than the Chinstrap penguins.
+### Q19: 
+The alternative hypothesis of the test is that the average flipper length of Adelie penguins is different than the average flipper length of Chinstrap penguins. This is a two-tailed test because we are not hypothesizing about the direction of any possible difference.
+
+
+### Q20:
+```{r}
+t.test(penguin_dat$flipper_length_mm ~ penguin_dat$species, alternative = c("two.sided"))
+
+
+```
+
+

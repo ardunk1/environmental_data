@@ -1,0 +1,401 @@
+---
+title: "Data Analysis Final: R Reference Guide"
+author: "Adrienne Dunk"
+subtitle: Analysis of Environmental Data
+output:
+  html_document:
+    df_print: paged
+    toc: false
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+# R Reference Guide {.tabset .tabset-pills}
+
+## Loading Data and Packages {.tabset}
+
+### library()
+The power of R is that it is an extensible universe. Authors are continuously writing and improving R packages to accomplish certain tasks, and you benefit! 
+
+The library() function loads a package into your R environment from an external source so that you can use it in your code. Every time you call the library() function, it will re-load the package.
+
+See library() in action:
+```{r}
+library(here) #loads the package "here" into the environment
+##Beware: The package must already exist in my system library
+
+```
+
+### require()
+The require() function behaves similarly to the library() function; however, it has one benefit. When the require() function is called, it will first check to see if a package is already loaded. If it is, require() will not re-load the package, which can save time and processing power. 
+
+See require() in action:
+```{r}
+require(palmerpenguins) #loads the package "palmerpenguins" into the environment.
+##Beware: The package must already exist in my system library
+
+```
+
+### Functions in Action
+Now that we used library() to load the package here, let's use it to create a data object
+```{r}
+here() #returns the directory pathway
+#All Environmental Data students should have the class folder set up the same, so the following should work:
+
+ginkgo <- read.csv(here("data", "ginkgo_data_2021.csv")) #create a data object from the csv
+
+ls() #confirm that the object ginkgo is in the workspace
+class(ginkgo) #confirm that ginkgo is a data.frame as anticipated
+```
+
+## Data Structures {.tabset}
+
+### c() 
+
+The function c() *combines* or *concanates* its arguments into a vector (a 1-dimensional data structure consisting of 1 or more elements)/
+
+Note:
+*   All of the elements must be the same type of data object (character, numeric, bolean)
+
+Here are two examples with different data types:
+```{r}
+num_vec <- c(1,2,3,4,5,5) # create a vector of numbers
+
+char_vec <- c("a", "cat", "always wins") #create a vector of character strings
+```
+
+The vector contents can be shown by calling the vector name or using hte print() function
+```{r}
+num_vec #Entered into the script or console, this prints the vector's contents
+
+print(char_vec) #using the print() function does the same thing as entering the vector name
+
+```
+
+### length()
+The function length() will return the length of an existing vector (i.e., the number of elements) or it can be used to set the length of an existing vector.
+
+For example:
+```{r}
+x <- c(1:15) #create a vector named "x" and populate it with the values of 1-15
+x #check that it was built as planned
+length(x) #query the length of x 
+
+length(x) <- 10 #alter "x" so that it only contains the first 10 elements
+x #values 1-10 returned
+
+length(x) <- 15 #alter "X" again so that it is as long as it was originally
+x #there are 15 elements, but the last 5 are NA since the values were previously removed.
+```
+length() can be used on all kinds of vectors, for example:
+```{r}
+y <- c("yes", "no", "maybe", "probably", "sure") #create character vector
+length(y) #check the length which returns the number of strings in the vector (5)
+
+length(y[1]) #Query the length of the first entry's charcter string? No - it returns the length of the subset, not the number of characters
+
+```
+
+### matrix()
+The function matrix() creates a matrix of rows and columns of the same type of data object i.e., all numeric, all character, etc.). Matrices are organized by rows first, and columns second when discussing dimensions.
+
+When building a matrix, specify the values, the number of rows (nrow) and/or the number of columns (ncol)
+```{r}
+m0 <- matrix(1:10, nrow = 2, ncol = 5)#a matrix with values 1-10 organized into 2 rows and 5 columns
+m0 #notice - R populated the values 1-10 down the columns.
+
+m1 <- matrix(1:10, nrow = 2)
+m1 #notice - same matrix as above; R inferred how many columns were needed to accommodate the values 1-10
+
+m2 <- matrix(1:10, nrow = 2, byrow=TRUE)
+m2 #notice - matrix was filled along the row when byrow = TRUE; R automatically sets byrow = FALSE unless specified
+
+m3 <- matrix(1:11, nrow = 2)
+m3 #notice - R started to cycle through the desired values to fill the matrix.
+```
+
+You can also build matrices out of vectors: 
+```{r}
+
+c1 <- c(1:10) #vector with length 10
+c2 <- c(11:20) #vector with length 10
+
+m4 <- matrix(c(c1, c2), ncol = 2) #create a matrix with the values from c1 and c2 organized into 10 rows of 2 columns
+m4
+
+dim(m4) #check the dimensions of m4
+#notice - dimensions are given as a vector of the number of rows (10) and the number of columns (2)
+
+```
+
+
+
+### data.frame()
+The data.frame() function builds data frames that are similar to matrices in that they are organized by rows and columns, but differ in that each column can contain a different type of data (i.e., character, numberic, boolean).
+
+Data frames can be built directly:
+```{r}
+#recall that we built c1, and c2 in the matrix() chunk
+#c1 - integers from 1-10
+#c2 - integers from 11-20
+
+c3 <- c("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
+
+df0 <- data.frame(c1, c2, c3) #build a dataframe of c1, c2, and c3
+df0 #notice - the coumn names correspond to the variable names
+
+df1 <- data.frame(first = c1, second = c2) #can assign more descriptive column names when building 
+df1
+
+```
+Data frames are also the data structure built when importing data that has 1+ classes in it.
+
+For an example, see **Functions in Action** tab under the **Loading Data and Packages** section.
+
+
+
+### Data Structure in Action
+Let's practice examining a dataframe using the dataframe ginkgo built in the **Loading Data and Packages** section.
+
+```{r}
+class(ginkgo) #confirm ginkgo is a dataframe
+nrow(ginkgo) #how many rows does ginkgo contain? 
+
+#This means there are 756 observations of data in the dataframe.
+
+ncol(ginkgo) #how many columns does ginkgo contain?
+
+#This means that there are six variables in the dataframe.
+
+dim(ginkgo) #What are the dimensions of ginkgo?
+
+#Remember: the rows are always reported first.
+
+
+```
+
+## Subsetting {.tabset}
+
+Subsetting is a way to select only a portion of a larger dataset.
+
+### Subsetting ($)
+
+If your data has column (variable) names, the "$" can be used to call the column by name. The syntax is:
+
+dataframeName$variable name
+
+For example:
+```{r}
+names(ginkgo) #return the column names in the dataframe ginkgo
+
+#select only the site_id column from the dataset and assign it to a new variable:
+
+var1 <- ginkgo$site_id
+#because we don't want to return a list of 765 site IDs, we'll just check that we subset 1 column of the data frame by confirming the dimensions:
+dim(var1) #Returns NULL because var1 is a vector
+length(var1) #Returns the number of entries in the vector (756)
+
+```
+
+
+### Subsetting ([])
+
+If variables do not have a clear name, or you wish to subset combinations of rows and columns, you can use square brackets ([]) after the dataframe name to call specific data locations.
+
+Remember: R always operates on rows first, and then columns. 
+
+For example:
+```{r}
+#Let's check out the first few rows of the ginkgo data:
+head(ginkgo)
+
+## Select rows:
+
+first_row <- ginkgo[1 ,] #Notice - I selected row 1, and then after the column is empty - this selects all columns
+first_row
+first_row2 <- ginkgo[1,1:6] #Notice - same selection as above, but I specified first row, all six columns
+first_row == first_row2 #confirm the two dataframes are identical
+
+## Select a single element:
+
+single <- ginkgo[2,3] #select value in row 2, column 3
+single #confirm it matches the value seen above - 2nd value under max_width
+
+## Select a column
+
+third_col <- ginkgo[ ,3] # Select all rows of data, but only the third column
+
+head(third_col) #check out the first six entries of thrid_col to make sure they match the first six entries in max_width - which is the third column
+length(third_col) #confirm we selected the entire column - 756 values.
+
+```
+
+### subset()
+
+The subset() function allows you to select portions of data objects that meet certain criteria.
+
+For example, recall that we loaded the palmerpenguin dataset in the **Loading Data and Packages** section.
+```{r}
+names(penguins) #check the names of the variables in the dataset
+
+unique(penguins$species) #check the unique values there are within the species variable - there are 3
+
+Adelie <- subset(penguins, species == "Adelie") #create a new variable named "Adelie" that has all the rows of data associated with the species Adelie
+
+```
+
+## Numerical Data Exploration {.tabset}
+
+
+### summary()
+The summary() function provides a series of summary statistics for the entered object. The object can be either a data object or a model.
+
+Here's its use for a data object:
+```{r}
+summary(ginkgo) #The summary function provides summary statistics (min/max, quartiles, mean, and median for each variable in the dataframe separately.
+
+summary(c1) #The summary function can also be used on vectors or matrices.
+
+```
+Here's its use on a model:
+```{r}
+mod1 <- lm(max_width ~ seeds_present, data = ginkgo) #data entered here is the linear model of (max_width conditioned on seeds_present, from ginkgo dataset).
+summary(mod1) #The summary function provides information on your model residuals, intercept, and slope coefficients and their p-values.
+
+```
+
+
+### mean()
+The mean() function returns the average value of a set of numbers. This function can be used on numeric or logical values, but not characters. Data types cannot be mixed. The NA values must be removed when calculating the mean, otherwise an error will be returned.
+
+```{r}
+class(ginkgo$max_width) #numeric
+mean(ginkgo$max_width, na.rm = TRUE)
+#na.rm = TRUE states that NA will be removed prior to calculating the mean.
+
+class(ginkgo$seeds_present) #logical
+mean(ginkgo$seeds_present) # returns a value because R treats TRUE as 1 and FALSE as 0
+
+
+round(mean(ginkgo$seeds_present), 2) #rounds the calculated mean to 2 decimal places
+
+mean(ginkgo[ , 2:3]) #Warning returned when we try to get the mean of a numeric and logical string at one time
+
+```
+### sd()
+The sd() function returns the standard deviation of a set of numbers. It has the same operational limitations as mean in terms of mixing data types and requiring the removal of NA values when calling the function.
+
+```{r}
+sd(ginkgo$petiole_length) #returns an NA value - there must be an NA in the vector
+sd(ginkgo$petiole_length, na.rm = TRUE) #remove the NA's prior to calculating, and the function returns a value.
+
+```
+
+
+
+
+## Graphical Data Exploration {.tabset}
+
+### plot() (Scatterplots)
+
+The plot() function produces a scatterplot of an x and y value. This simple plot can then be stylizes using a series of arguments. The syntax is plot(x vector, y vector.)
+
+The simplest level:
+```{r}
+plot(ginkgo$max_depth, ginkgo$max_width) #simple, but ugly scatter plot
+
+```
+
+The plot can be stylized as follows:
+```{r}
+plot(ginkgo$max_depth, #x values
+     ginkgo$max_width, #y values
+     col = "blue", # change the color of the points (R has hundreds of colors to choose from)
+     pch = 17, #pch changes the point symbol (R has 20 options that are specified using integers 1-20)
+     cex = 0.5, #cex sets the symbol size (R defaults to 1)
+     main = "Ginkgo Leaves Maximum Width by Depth", # produces a graph title
+     xlab = "Max Depth (mm)", #Produces x axis label
+     xlim = c(0, 150), #Sets the maximum limit of the X axis
+     ylab = "Max Width (mm)", #Produces y axis label
+     ylim = c(0, 150) #sets the limits of the y axis
+  )
+
+```
+
+
+
+
+### hist() (Histograms)
+The hist() function produces a histogram of values. The function accepts one set of values with syntax of hist(x values)
+
+Simple histogram:
+```{r}
+hist(penguins$flipper_length_mm) #note: R put the continuous data into 13 bins, each of 5 mm in length - we did not select for this.
+
+```
+
+The x-axis limits and binning of categorical data can be manually controlled in R to provide a histogram that is easy to read and communicates what you want it to.
+
+A series of options to control the break points along the x axis follow. Each of the examples uses breaks = but a single number, a vector, or a function can be used. There are challenges and benefits to each option
+
+```{r}
+hist(penguins$flipper_length_mm, breaks = 25) #Here, we've told R to separate the data into 25 bins; however, R selected 26 so that the break points are 2.5 instead of a less even size. (breaks = is really just a suggestion)
+
+hist(penguins$flipper_length_mm, xlim = c(160, 240), breaks = 26) #forces the x-axis to go from 160 to 240; breaks = is still just a suggestion - the histogram has 30 bins.
+
+hist(penguins$flipper_length_mm, breaks = c(170, 180, 190, 200, 210, 220, 230, 240)) #Now, breaks = is not a suggestion, it is a vector of start/end points that R must use, but this is a little long winded if we had a large range
+
+
+FUN1 <- function(x1){
+  mini <- min(x1, na.rm = TRUE)
+  maxi <- max(x1, na.rm = TRUE)
+  rang <- (mini + maxi)/2
+  return(rang)
+  }
+
+
+hist(penguins$flipper_length_mm, breaks = FUN1(penguins$flipper_length_mm)) # Thist breaks uses a function (FUN1) that is just for demonstration
+
+hist(penguins$flipper_length_mm, breaks = 26, main = "Final Histogram for Demonstration", xlab = "Penguin Flipper Length (mm)", col = "orange", lty = 3) #can use many of the same formatting arguments as we saw under plot(). lty = line type - again there are 20 specified by integers.
+
+```
+
+
+
+### boxplot() (Box Plots)
+The boxplot() function allows you to visualize continuous response data with or without a categorical predictor.
+
+Simple boxplot:
+```{r}
+boxplot(ginkgo$petiole_length, main = "Ginkgo Petiole Length")
+```
+The continuous response data, such as Ginkgo Petiole Length, can be conditioned on a categorical response data to visually assess if the groupings are similar.
+
+Conditional boxplot:
+```{r}
+boxplot(petiole_length ~ seeds_present, data = ginkgo)
+
+```
+
+### par()
+
+
+## Distribution Functions {.tabset}
+
+### dnorm()
+
+
+### pnorm()
+
+### qnorm()
+
+### dbinom()
+
+
+### pbinom()
+
+
+### qbinom()
+
