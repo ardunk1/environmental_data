@@ -21,7 +21,7 @@ The power of R is that it is an extensible universe. Authors are continuously wr
 
 The library() function loads a package into your R environment from an external source so that you can use it in your code. Every time you call the library() function, it will re-load the package.
 
-See library() in action:
+Use library() in an example:
 ```{r}
 library(here) #loads the package "here" into the environment
 ##Beware: The package must already exist in my system library
@@ -29,9 +29,9 @@ library(here) #loads the package "here" into the environment
 ```
 
 ### require()
-The require() function behaves similarly to the library() function; however, it has one benefit. When the require() function is called, it will first check to see if a package is already loaded. If it is, require() will not re-load the package, which can save time and processing power. 
+The require() function behaves similarly to the library() function; however, it has a benefit. When the require() function is called, it will first check to see if a package is already loaded. If it is loaded, require() will not re-load the package, which can save time and processing power. 
 
-See require() in action:
+Use require() in an example:
 ```{r}
 require(palmerpenguins) #loads the package "palmerpenguins" into the environment.
 ##Beware: The package must already exist in my system library
@@ -39,12 +39,12 @@ require(palmerpenguins) #loads the package "palmerpenguins" into the environment
 ```
 
 ### Functions in Action
-Now that we used library() to load the package here, let's use it to create a data object
+Now that we used library() to load the package *here*, let's use it to create a data object:
 ```{r}
 here() #returns the directory pathway
 #All Environmental Data students should have the class folder set up the same, so the following should work:
 
-ginkgo <- read.csv(here("data", "ginkgo_data_2021.csv")) #create a data object from the csv
+ginkgo <- read.csv(here("data", "ginkgo_data_2021.csv")) #create a data object from the csv that is saved in the data folder
 
 ls() #confirm that the object ginkgo is in the workspace
 class(ginkgo) #confirm that ginkgo is a data.frame as anticipated
@@ -54,19 +54,20 @@ class(ginkgo) #confirm that ginkgo is a data.frame as anticipated
 
 ### c() 
 
-The function c() *combines* or *concanates* its arguments into a vector (a 1-dimensional data structure consisting of 1 or more elements)/
+The function c() *combines* or *concanates* its arguments into a vector (a 1-dimensional data structure consisting of 1 or more elements)
 
 Note:
+
 *   All of the elements must be the same type of data object (character, numeric, bolean)
 
 Here are two examples with different data types:
 ```{r}
-num_vec <- c(1,2,3,4,5,5) # create a vector of numbers
+num_vec <- c(1,2,3,4,5,5) #create a vector of numbers
 
 char_vec <- c("a", "cat", "always wins") #create a vector of character strings
 ```
 
-The vector contents can be shown by calling the vector name or using hte print() function
+The vector contents can be shown by calling the vector name or using the print() function
 ```{r}
 num_vec #Entered into the script or console, this prints the vector's contents
 
@@ -99,7 +100,7 @@ length(y[1]) #Query the length of the first entry's charcter string? No - it ret
 ```
 
 ### matrix()
-The function matrix() creates a matrix of rows and columns of the same type of data object i.e., all numeric, all character, etc.). Matrices are organized by rows first, and columns second when discussing dimensions.
+The function matrix() creates a matrix of rows and columns (i.e., 2-dimensional data) of the same type of data object (i.e., all numeric, all character, etc.). Matrices are organized by rows first, and columns second when discussing dimensions.
 
 When building a matrix, specify the values, the number of rows (nrow) and/or the number of columns (ncol)
 ```{r}
@@ -133,7 +134,7 @@ dim(m4) #check the dimensions of m4
 
 
 ### data.frame()
-The data.frame() function builds data frames that are similar to matrices in that they are organized by rows and columns, but differ in that each column can contain a different type of data (i.e., character, numberic, boolean).
+The data.frame() function builds data frames that are similar to matrices in that they are organized by rows and columns  (i.e., 2-dimensional), but differ from matrices in that each column (variable) can contain a different type of data (i.e., character, numberic, boolean).
 
 Data frames can be built directly:
 ```{r}
@@ -184,7 +185,7 @@ Subsetting is a way to select only a portion of a larger dataset.
 
 If your data has column (variable) names, the "$" can be used to call the column by name. The syntax is:
 
-dataframeName$variable name
+dataframeName$variableName
 
 For example:
 ```{r}
@@ -244,6 +245,8 @@ unique(penguins$species) #check the unique values there are within the species v
 
 Adelie <- subset(penguins, species == "Adelie") #create a new variable named "Adelie" that has all the rows of data associated with the species Adelie
 
+head(Adelie) #check that we selected all rows of data associated with Adelie species
+
 ```
 
 ## Numerical Data Exploration {.tabset}
@@ -272,8 +275,7 @@ The mean() function returns the average value of a set of numbers. This function
 
 ```{r}
 class(ginkgo$max_width) #numeric
-mean(ginkgo$max_width, na.rm = TRUE)
-#na.rm = TRUE states that NA will be removed prior to calculating the mean.
+mean(ginkgo$max_width, na.rm = TRUE) #na.rm = TRUE states that NA will be removed prior to calculating the mean.
 
 class(ginkgo$seeds_present) #logical
 mean(ginkgo$seeds_present) # returns a value because R treats TRUE as 1 and FALSE as 0
@@ -285,7 +287,7 @@ mean(ginkgo[ , 2:3]) #Warning returned when we try to get the mean of a numeric 
 
 ```
 ### sd()
-The sd() function returns the standard deviation of a set of numbers. It has the same operational limitations as mean in terms of mixing data types and requiring the removal of NA values when calling the function.
+The sd() function returns the standard deviation of a set of numbers. It has the same operational limitations as mean() in terms of mixing data types and requiring the removal of NA values when calling the function.
 
 ```{r}
 sd(ginkgo$petiole_length) #returns an NA value - there must be an NA in the vector
@@ -300,7 +302,7 @@ sd(ginkgo$petiole_length, na.rm = TRUE) #remove the NA's prior to calculating, a
 
 ### plot() (Scatterplots)
 
-The plot() function produces a scatterplot of an x and y value. This simple plot can then be stylizes using a series of arguments. The syntax is plot(x vector, y vector.)
+The plot() function produces a scatterplot of an x and y value. This simple plot can then be stylized using a series of arguments. The syntax is plot(x vector, y vector.)
 
 The simplest level:
 ```{r}
@@ -338,7 +340,7 @@ hist(penguins$flipper_length_mm) #note: R put the continuous data into 13 bins, 
 
 The x-axis limits and binning of categorical data can be manually controlled in R to provide a histogram that is easy to read and communicates what you want it to.
 
-A series of options to control the break points along the x axis follow. Each of the examples uses breaks = but a single number, a vector, or a function can be used. There are challenges and benefits to each option
+Below are a series of options to control the break points along the x axis. Each of the examples uses "breaks =" with various assigned values. There are challenges and benefits to each option.
 
 ```{r}
 hist(penguins$flipper_length_mm, breaks = 25) #Here, we've told R to separate the data into 25 bins; however, R selected 26 so that the break points are 2.5 instead of a less even size. (breaks = is really just a suggestion)
@@ -365,12 +367,13 @@ hist(penguins$flipper_length_mm, breaks = 26, main = "Final Histogram for Demons
 
 
 ### boxplot() (Box Plots)
-The boxplot() function allows you to visualize continuous response data with or without a categorical predictor.
+The boxplot() function allows you to visualize continuous response data with a categorical predictor.
 
-Simple boxplot:
+Here is a simple boxplot that graphically shows the summary information for one continuous response variable:
 ```{r}
 boxplot(ginkgo$petiole_length, main = "Ginkgo Petiole Length")
 ```
+
 The continuous response data, such as Ginkgo Petiole Length, can be conditioned on a categorical response data to visually assess if the groupings are similar.
 
 Conditional boxplot:
@@ -380,7 +383,7 @@ boxplot(petiole_length ~ seeds_present, data = ginkgo, xlab = "Seeds Present")
 ```
 
 ### par()
-par() controls graphical parameters. It can be used to adjust margins in the figure and to arrange multiple graphs into one figure by using par(mfrow = )
+The par() function controls graphical parameters. It can be used to adjust margins in the figure and to arrange multiple graphs into one figure by using par(mfrow = )
 
 Here's the example: 
 ```{r}
@@ -397,66 +400,71 @@ hist(penguins$body_mass_g, main = "Body Mass", xlab = "Body Mass (g)", col = "or
 
 ### dnorm()
 
-dnorm() is the probability density function for normal continuous distributions.It returns the probability of a given value along a normal distribution. In other words, it gives the height of the probability distribution for a given x value.
+The dnorm() function is the probability density function for normal continuous distributions.It returns the probability of a given value along a normal distribution. In other words, it gives the height of the probability distribution for a given x value.
 
 The arguments include:
-x - the value(s) you want to know the probability of
-mean - the distribution mean
-sd - the distribution standard deviation
-log - defaults to FALSE, can be overridden to TRUE
+
+*   x - the value(s) you want to know the probability of
+*   mean - the distribution mean
+*    sd - the distribution standard deviation
+*    log - defaults to FALSE, can be overridden to TRUE if you have a logarithmic distribution
 
 ```{r}
-dnorm(2, mean = 5, sd = 2)
-#For a normal distribution with a mean of 5 and a standard deviation of 2, there is a 6.4% chance of observing the value 2
+dnorm(2, mean = 5, sd = 2) #For a normal distribution with a mean of 5 and a standard deviation of 2, there is a 6.5% chance of observing the value 2
 
 ```
 
 ### pnorm()
 
-pnorm() is the cumulative density function for the normal continuous distribution. It returns the probability of observing any value less than or equal to a given value.In other words, it gives the total area under the curve from x=0 to x=given argument. 
+The pnorm() function is the cumulative density function for the normal continuous distribution. It returns the probability of observing any value less than or equal to a given value. In other words, it gives the total area under the curve from x=0 to x=given argument. 
 
-The arguments are the same as for bnorm() with the addition of: 
-lower.tail = TRUE - which is the default and returns the cumulative probability of less than the given number and
-lower.tail = FALSE - which return the inverse of TRUE (1-lower.tail = TRUE)
+The arguments are the same as for dnorm() with the addition of: 
+
+*   lower.tail = TRUE - which is the default and returns the cumulative probability of less than the given number, or
+*   lower.tail = FALSE - which returns the inverse of TRUE (1-lower.tail = TRUE)
+
 ```{r}
 
-pnorm(2, mean = 5, sd = 2) #0.0668
-pnorm(2, mean = 5, sd = 2, lower.tail = FALSE) #0.9333
+pnorm(2, mean = 5, sd = 2) #6.7% chance of observing a value of 2 or less (remember dbinom provided only the chance of observing a value of 2)
+pnorm(2, mean = 5, sd = 2, lower.tail = FALSE) #93.3% chance of observing a value greater than 2 (the inverse of above)
 
 ```
 
 ### qnorm()
 
-qnorm() is the quantile density function for the normal continuous distribution. It returns the value from the distribution at a given quantile.
+The qnorm() function is the quantile density function for the normal continuous distribution. It returns the value from the distribution at a given quantile.
 
-The arguments are the same as the bnorm except for the entered value, which represents a probabilty.
+The arguments are the same as the dnorm except for the entered value, which represents a quantile as a decimal value.
 
 ```{r}
-qnorm(0.90, mean = 5, sd = 2) #value of 7.5
+qnorm(0.90, mean = 5, sd = 2) #At the 90% percentile, we would observe a value of 7.5
 
 
 ```
 
 
 ### dbinom()
-dbinom() is the probability mass function for the binomial discrete distribution with two outcomes. This function provides the probability density distribution for any given number of "successes" in th provided distribution. 
+The dbinom() function is the probability mass function for the binomial discrete distribution with two outcomes. This function provides the probability density distribution for any given number of "successes" in the provided distribution. 
 
 The arguments are:
-x - the number of successes you're calculating
-size - number of trials
-prob - probability of success (must be the same for every trial)
-log = FALSE - default, can be over-ridden to TRUE
+
+*   x - the number of successes you're calculating
+*   size - number of trials
+*   prob - probability of success (must be the same for every trial)
+*   log = FALSE - default, can be over-ridden to TRUE
 
 ```{r}
-dbinom(3, 10, 0.5) #11% chance of getting 3 successes in 10 trials with a probability of success of 50%
+dbinom(3, 10, 0.5) #11.7% chance of getting 3 successes in 10 trials with a probability of success of 50%
 
 ```
 
 ### pbinom()
-pbinom() is the cumulative mass function for the binomial discrete distribution. This function provides the probability of observing a given number or fewer successes. 
+The pbinom() function is the cumulative mass function for the binomial discrete distribution. This function provides the probability of observing a given number or fewer successes. 
 
 The arguments are the same as the dbinom function, except:
-q - probability, instead of x. Similar to the pnorm, the lower.tail and log can be set to TRUE or FALSE.
+
+*   q - probability, instead of x. Similar to the pnorm, 
+*   lower.tail and log can be set to TRUE or FALSE.
 
 
 ```{r}
@@ -466,7 +474,9 @@ pbinom(3, 10, 0.5) #17% chance of getting 3 or fewer success in 10 trials with a
 
 ### qbinom()
 
-qbinom() is the quantile function for the binomial discrete distribution. This function provides the number of successes that would be observed within a given quantile of the distribution.
+The qbinom() function is the quantile function for the binomial discrete distribution. This function provides the number of successes that would be observed within a given percentile of the distribution.
+
+The arguements are the same as the dbinom() except for the entered value, which represents a quantile as a decimal value.
 
 ```{r}
 qbinom(.17, 10, 0.5) # At the 17th percentile, with 10 trials and a success rate of 50%, you would observe 3 successes.
